@@ -4,12 +4,11 @@ import org.bhavin.hibernate.demo.entity.Course;
 import org.bhavin.hibernate.demo.entity.Instructor;
 import org.bhavin.hibernate.demo.entity.InstructorDetail;
 import org.bhavin.hibernate.demo.entity.Review;
-import org.bhavin.hibernate.demo.entity.Student;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class DeleteStudentDemo {
+public class CreateCourseAndReviewDemo {
 
 	public static void main(String[] args) {
 		
@@ -20,7 +19,6 @@ public class DeleteStudentDemo {
 				.addAnnotatedClass(InstructorDetail.class)
 				.addAnnotatedClass(Course.class)
 				.addAnnotatedClass(Review.class)
-				.addAnnotatedClass(Student.class)
 				.buildSessionFactory();
 		
 		//create session
@@ -32,18 +30,20 @@ public class DeleteStudentDemo {
 			//start transaction
 			session.beginTransaction();
 			
-			//get the student
-			int theId = 1;
-			Student tempStudent = session.get(Student.class, theId);
-			
-			//delete the course
-			System.out.println("Deleting student..."+tempStudent);
-			session.delete(tempStudent);
-			
+			//create a course
+			Course tempCourse = new Course("Guitar- Tings of Strings");
+			//add some reviews
+			tempCourse.addReview(new Review("Very Impressive... thank you!"));
+			tempCourse.addReview(new Review("Sharp understanding of cords, great work!"));
+			tempCourse.addReview(new Review("Umm boring... there is a scope of improve!"));
+			//save the course and leverage cascade all
+			System.out.println("Saving course..."+tempCourse);
+			System.out.println(tempCourse.getReviews());
+			session.save(tempCourse);
 			//commit transaction
 			session.getTransaction().commit();
-			
 			System.out.println("Done");
+			
 		}
 		catch(Exception exc) {
 			exc.printStackTrace();

@@ -1,5 +1,6 @@
 package org.bhavin.hibernate.demo.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -10,13 +11,26 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="student")
-public class Student {
+@Table(name="instructor")
+public class Instructor {
+	// annotate the class as an entity and map to db table
+	
+	//define the fields
+	
+	//annotate the fields with db column name
+	
+	// setup relation mapping to instructor_detail
+	
+	//create constructors
+	
+	//generate getters and setters
+	
+	// generate toString() method
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -32,22 +46,20 @@ public class Student {
 	@Column(name="email")
 	private String email;
 	
-	@ManyToMany(
-			fetch= FetchType.LAZY,
-			cascade={CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
-			)
-	@JoinTable(
-			name="course_student",
-			joinColumns=@JoinColumn(name="student_id"),
-			inverseJoinColumns=@JoinColumn(name="course_id")
-			)
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="instructor_detail_id")
+	private InstructorDetail instructorDetail;
+	
+	@OneToMany(fetch=FetchType.LAZY, 
+				mappedBy="instructor", 
+				cascade={CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 	private List<Course> courses;
 	
-	public Student() {
+	public Instructor() {
 		
 	}
 
-	public Student(String firstName, String lastName, String email) {
+	public Instructor(String firstName, String lastName, String email) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
@@ -85,6 +97,14 @@ public class Student {
 		this.email = email;
 	}
 
+	public InstructorDetail getInstructorDetail() {
+		return instructorDetail;
+	}
+
+	public void setInstructorDetail(InstructorDetail instructorDetail) {
+		this.instructorDetail = instructorDetail;
+	}
+
 	public List<Course> getCourses() {
 		return courses;
 	}
@@ -95,7 +115,19 @@ public class Student {
 
 	@Override
 	public String toString() {
-		return "Student [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + "]";
+		return "Instructor [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+				+ ", instructorDetail=" + instructorDetail + "]";
+	}
+	
+	// add convenience method for bi-directional relationship
+	
+	public void add(Course tempCourse) {
+		if(courses == null) {
+			courses = new ArrayList<>();
+		}
+		
+		courses.add(tempCourse);
+		tempCourse.setInstructor(this);
 	}
 	
 }

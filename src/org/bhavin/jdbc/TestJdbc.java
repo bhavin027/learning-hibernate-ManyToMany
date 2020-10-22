@@ -7,7 +7,7 @@ public class TestJdbc {
 
 	public static void main(String[] args) {
 		
-		String jdbcUrl = "jdbc:mysql://localhost/hb_student_tracker?useSSL=false&allowPublicKeyRetrieval=true";
+		String jdbcUrl = "jdbc:mysql://localhost/hb-05-many-to-many?useSSL=false&allowPublicKeyRetrieval=true";
 		String user = "hbstudent";
 		String pass = "hbstudent";
 		

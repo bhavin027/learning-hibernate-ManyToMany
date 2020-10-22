@@ -9,7 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class DeleteStudentDemo {
+public class AddCourseForStudentDemo {
 
 	public static void main(String[] args) {
 		
@@ -32,13 +32,25 @@ public class DeleteStudentDemo {
 			//start transaction
 			session.beginTransaction();
 			
-			//get the student
-			int theId = 1;
+			// get student from db
+			int theId=1;	
 			Student tempStudent = session.get(Student.class, theId);
+			System.out.println("Student: "+tempStudent);
 			
-			//delete the course
-			System.out.println("Deleting student..."+tempStudent);
-			session.delete(tempStudent);
+			// create more courses
+			System.out.println("\nCreating Courses\n");
+			Course tempCourse1 = new Course("Guitar- Tings of the Strings");
+			Course tempCourse2 = new Course("Amazing String Work");
+			
+			//add student to those courses
+			System.out.println("Adding students to the course");
+			tempCourse1.addStudent(tempStudent);
+			tempCourse2.addStudent(tempStudent);
+			
+			//save the course
+			System.out.println("\nSaving the Courses...");
+			session.save(tempCourse1);
+			session.save(tempCourse2);
 			
 			//commit transaction
 			session.getTransaction().commit();
